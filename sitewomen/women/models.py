@@ -2,6 +2,7 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 
 def translit_to_eng(s: str) -> str:
@@ -40,6 +41,8 @@ class Women(models.Model):
     tags = models.ManyToManyField('TagPost', blank=True, related_name='tags', verbose_name="Теги")
     husband = models.OneToOneField('Husband', on_delete=models.SET_NULL,
                                    null=True, blank=True, related_name='wuman', verbose_name="Муж")
+    author = models.ForeignKey(get_user_model(), 
+                               on_delete=models.SET_NULL, related_name='posts', null=True, default=None)
 
     objects = models.Manager()
     published = PublishedManager()
