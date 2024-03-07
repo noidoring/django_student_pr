@@ -10,6 +10,7 @@ from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import CreateView, UpdateView
 from .forms import ProfileUserForm, UserPasswordChangeForm
+from sitewomen import settings
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
@@ -38,7 +39,8 @@ class ProfileUser(LoginRequiredMixin, UpdateView):
     form_class = ProfileUserForm
     template_name = 'users/profile.html'
     extra_context = {
-        'title':'Профиль пользователя'
+        'title':'Профиль пользователя',
+        'default_image': settings.DEFAULT_USER_IMAGE,
     }
 
     def get_success_url(self):
