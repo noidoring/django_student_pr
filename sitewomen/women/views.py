@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, FormView, CreateView, UpdateView
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from .forms import AddPostForm, UploadFileForm
@@ -61,14 +61,15 @@ class AddPage(PermissionRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdatePage(DataMixin, UpdateView):
+class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     model = Women
     fields = ['title', 'content', 'photo', 'is_published', 'cat']
     template_name = 'women/addpage.html'
     success_url = reverse_lazy('home')
     title_page = 'Редактирование статьи'
+    permission_required = 'women.change_women'
 
-
+@permission_required(perm="women.view_women", raise_exception=True)
 def contact(request):
     return HttpResponse("Обратная связь")
 
